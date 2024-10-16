@@ -87,7 +87,9 @@ export default{
             }
         }
 
-        onMounted(fetchgames);
+        onMounted(() => {
+            fetchgames();
+        });
         return{
             games,
             loading,

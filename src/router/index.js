@@ -19,4 +19,10 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  // This will set the scroll position to the top
+  window.scrollTo(0, 0);
+  next();
+});
+
 export default router;

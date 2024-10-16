@@ -49,13 +49,13 @@
 
                   <div class="game-metadata mt-4 p-4">
                      <div class="row">
-
                         <div class="col-md-6 mb-3">
                            <div class="metadata-item">
                               <i class="bi bi-tags"></i>
                               <strong>Categories : </strong>
                               <div class="tags">
-                                 <span class="tag">{{ game.category }}</span>
+                                 <div class="tag" v-for="category in gameCategories" :key="category">{{ category }}
+                                 </div>
                               </div>
                            </div>
                         </div>
@@ -65,7 +65,7 @@
                               <i class="bi bi-tag"></i>
                               <strong>Tags : </strong>
                               <div class="tags">
-                                 <span class="tag">{{ game.tags }}</span>
+                                 <div class="tag" v-for="tag in gameTags" :key="tag">{{ tag }}</div>
                               </div>
                            </div>
                         </div>
@@ -76,11 +76,9 @@
                               <strong>Type :</strong> HTML5
                            </div>
                         </div>
-
                      </div>
                   </div>
                </div>
-
 
                <!-- Another Advertisement Section -->
                <div class="advertisement mt-4">
@@ -94,7 +92,7 @@
    </div>
 
 </template>
-<script>
+<!-- <script>
 import store from '@/store';
 
 export default {
@@ -126,8 +124,50 @@ export default {
    }
 }
 
-</script>
+</script> -->
+<script>
+import store from '@/store';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
 
+export default {
+   name: "SingleGame",
+   props: ['slug'],
+   setup(props) {
+      const game = ref({});
+      const related_games = ref([]);
+      const imagebaseurl = store.apiImageUrl;
+      const gameCategories = ref([]);
+      const gameTags = ref([]);
+
+      const getGameDetails = async () => {
+         try {
+            const response = await axios.get(`${store.ApiBaseUrl}game/${props.slug}`);
+            game.value = response.data.game;
+            related_games.value = response.data.related_games;
+            gameCategories.value = response.data.game.category;
+            gameTags.value = response.data.game.tags;
+         } catch (err) {
+            console.error('error', err);
+         }
+      };
+
+      onMounted(() => {
+            // window.scrollTo(0,0);
+            getGameDetails();
+        });
+      return {
+         game,
+         related_games,
+         imagebaseurl,
+         gameCategories,
+         gameTags
+
+      }
+   }
+}
+
+</script>
 <style scoped>
 .game-page {
    font-family: Arial, sans-serif;
@@ -372,12 +412,43 @@ export default {
 .tags {
    display: flex;
    flex-wrap: wrap;
+   /* Allow tags to wrap to the next line */
    gap: 10px;
+   /* Space between tags */
    margin-left: 10px;
+   /* Left margin */
+   margin-top: 5px;
+   /* Top margin */
+   overflow: hidden;
+   /* Hide overflow */
+}
+
+.metadata-item {
+   font-size: 1.1rem;
+   color: #495057;
+   background-color: rgba(255, 255, 255, 0.8);
+   padding: 1rem;
+   border-radius: 8px;
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+   display: flex;
+   flex-direction: column;
+   /* Stack items vertically */
+}
+
+.tags {
+   display: flex;
+   flex-wrap: wrap;
+   /* Allow tags to wrap to the next line */
+   gap: 10px;
+   /* Space between tags */
+   margin-left: 10px;
+   /* Left margin */
+   margin-top: 5px;
+   /* Top margin */
 }
 
 .tag {
-   background-color: rgb(34 98 209 / 90%);
+   background-color: rgba(34, 98, 209, 0.9);
    border: 1px solid #1e58dd;
    border-radius: 5px;
    padding: 8px 12px;
@@ -385,6 +456,10 @@ export default {
    color: #ffffff;
    transition: background-color 0.3s;
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   margin-bottom: 5px;
+   /* Space between rows if they wrap */
+   white-space: nowrap;
+   /* Prevent text from wrapping inside the tag */
 }
 
 .tag:hover {
@@ -396,17 +471,6 @@ export default {
    /* Pointer on hover */
 }
 
-.metadata-item {
-   font-size: 1.1rem;
-   color: #495057;
-   background-color: rgba(255, 255, 255, 0.8);
-   /* Glass effect */
-   padding: 1rem;
-   border-radius: 8px;
-   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-   display: flex;
-   align-items: center;
-}
 
 .metadata-item i {
    font-size: 1.5rem;

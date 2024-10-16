@@ -105,7 +105,10 @@ export default {
             }
         };
 
-        onMounted(fetchgames);
+        onMounted(() => {
+            // window.scrollTo(0,0);
+            fetchgames();
+        });
         return{
             games,
             loading,
