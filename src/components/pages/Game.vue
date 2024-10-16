@@ -30,7 +30,7 @@
     </section>
 </template>
 
-<script>
+<!-- <script>
 import store from '@/store';
 
 
@@ -59,6 +59,41 @@ export default {
             }
         }
     },
+}
+</script> -->
+
+<script>
+import store from '@/store';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+
+export default{
+    name:"Game",
+    setup(){
+        const games = ref([]);
+        const loading = ref(true);
+        const imagebaseurl = store.apiImageUrl;
+
+        const fetchgames = async () => {
+            try{
+                const response = await axios.get(`${store.ApiBaseUrl}game`);
+                games.value = response.data.data;
+                console.log(response.data.data);
+
+            }catch(err){
+                console.error('error', err);
+            }finally{
+                loading.value = false;
+            }
+        }
+
+        onMounted(fetchgames);
+        return{
+            games,
+            loading,
+            imagebaseurl
+        }
+    }
 }
 </script>
 
