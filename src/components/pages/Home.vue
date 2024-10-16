@@ -37,7 +37,7 @@
 </template>
 
 
-<script>
+<!-- <script>
 import store from '@/store';
 
 export default {
@@ -73,6 +73,47 @@ export default {
         }
     },
 }
+</script> -->
+
+
+<!------- Use Composition API ------>
+<script>
+import store from '@/store';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+
+export default {
+    name: "Home",
+    setup() {
+        const games = ref([]);
+        const loading = ref(true);
+        const imagebaseurl = store.apiImageUrl;
+
+        const fetchgames = async () => {
+            try {
+                const response = await axios.get(`${store.ApiBaseUrl}game`, {
+                    params: {
+                        limit: 54,
+                    }
+                });
+                games.value = response.data.data;
+                console.log(response.data.data);
+            } catch(err) {
+                console.error('Error fetching games:', err);
+            } finally {
+                loading.value = false;
+            }
+        };
+
+        onMounted(fetchgames);
+        return{
+            games,
+            loading,
+            imagebaseurl
+        }
+    }
+}
+
 </script>
 
 <style scoped>

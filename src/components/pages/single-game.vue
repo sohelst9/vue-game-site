@@ -55,8 +55,7 @@
                               <i class="bi bi-tags"></i>
                               <strong>Categories : </strong>
                               <div class="tags">
-                                 <span class="tag">Casual</span>
-                                 <span class="tag">Racing & Driving</span>
+                                 <span class="tag">{{ game.category }}</span>
                               </div>
                            </div>
                         </div>
@@ -66,9 +65,7 @@
                               <i class="bi bi-tag"></i>
                               <strong>Tags : </strong>
                               <div class="tags">
-                                 <span class="tag">Multiplayer</span>
-                                 <span class="tag">Strategy</span>
-                                 <span class="tag">Fun</span>
+                                 <span class="tag">{{ game.tags }}</span>
                               </div>
                            </div>
                         </div>
