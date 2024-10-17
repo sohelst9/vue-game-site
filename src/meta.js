@@ -8,19 +8,19 @@ export function setDefaultMeta({
   ogImage,
   canonical,
 }) {
-  document.title = title || "Default Title";
+  document.title = title || "Welcome to gaming site";
 
   const descriptionMeta = document.querySelector('meta[name="description"]');
   if (descriptionMeta) {
     descriptionMeta.setAttribute(
       "content",
-      description || "Default description for all pages."
+      description || "Welcome to gaming site"
     );
   }
 
   const ogTitleMeta = document.querySelector('meta[property="og:title"]');
   if (ogTitleMeta) {
-    ogTitleMeta.setAttribute("content", ogTitle || "Default OG Title");
+    ogTitleMeta.setAttribute("content", ogTitle || "Welcome to gaming site");
   }
 
   const ogDescriptionMeta = document.querySelector(
@@ -29,23 +29,25 @@ export function setDefaultMeta({
   if (ogDescriptionMeta) {
     ogDescriptionMeta.setAttribute(
       "content",
-      ogDescription || "Default OG description."
+      ogDescription || "Welcome to gaming site"
     );
   }
 
   const ogImageMeta = document.querySelector('meta[property="og:image"]');
   if (ogImageMeta) {
+    const defaultOgImage = '/image/512.webp';
     ogImageMeta.setAttribute(
       "content",
-      ogImage || "https://yourwebsite.com/path-to-image/default-og-image.webp"
+      ogImage || defaultOgImage
     );
   }
 
   const canonicalLink = document.querySelector('link[rel="canonical"]');
   if (canonicalLink) {
+    const baseUrl = window.location.origin; // Dynamic base URL
     canonicalLink.setAttribute(
       "href",
-      canonical || "https://naptechgames.com/"
+      canonical || `${baseUrl}/`
     );
   }
 }

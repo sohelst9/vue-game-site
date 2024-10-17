@@ -78,6 +78,7 @@ export default {
 
 <!------- Use Composition API ------>
 <script>
+import { setDefaultMeta } from '@/meta';
 import store from '@/store';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
@@ -108,12 +109,14 @@ export default {
         onMounted(() => {
             // window.scrollTo(0,0);
             fetchgames();
-            document.title = 'Welcome to NapTech Games';
-            document.querySelector('meta[name="description"]').setAttribute("content", "Explore the exciting world of online games with NapTech Games.");
-            document.querySelector('meta[property="og:title"]').setAttribute("content", "Welcome to NapTech Games");
-            document.querySelector('meta[property="og:description"]').setAttribute("content", "Explore exciting games at NapTech Games.");
-            document.querySelector('meta[property="og:image"]').setAttribute("content", "https://yourwebsite.com/path-to-image/home-og-image.webp");
-            document.querySelector('link[rel="canonical"]').setAttribute("href", "https://naptechgames.com/");
+            setDefaultMeta({
+                title: 'Welcome to NapTech Games',
+                description: 'Discover exciting games on NapTech Games.',
+                ogTitle: 'Welcome to NapTech Games',
+                ogDescription: 'Play the best online games with us!',
+                ogImage: 'https://yourwebsite.com/path-to-image/homepage-og-image.webp',
+                canonical: 'https://naptechgames.com/home'
+            });
         });
         return {
             games,

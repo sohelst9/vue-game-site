@@ -63,6 +63,7 @@ export default {
 </script> -->
 
 <script>
+import { setDefaultMeta } from '@/meta';
 import store from '@/store';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
@@ -89,6 +90,14 @@ export default{
 
         onMounted(() => {
             fetchgames();
+            setDefaultMeta({
+                title: 'Game | Welcome to NapTech Games',
+                description: 'Discover exciting games on NapTech Games.',
+                ogTitle: 'Welcome to NapTech Games',
+                ogDescription: 'Play the best online games with us!',
+                ogImage: 'https://yourwebsite.com/path-to-image/homepage-og-image.webp',
+                canonical: 'https://naptechgames.com/home'
+            });
         });
         return{
             games,
