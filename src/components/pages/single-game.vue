@@ -31,10 +31,13 @@
 
                      <div class="col-6 col-md-3 mb-3" v-for="related_game in related_games">
                         <div class="card game-card">
-                           <img src="https://via.placeholder.com/150" class="card-img-top" alt="Related Game Image">
+                           <img :src="`${imagebaseurl}${related_game.image}`" class="card-img-top"
+                              alt="Related Game Image">
                            <div class="card-body text-center">
-                              <h5 class="card-title">Related Game Tdddddddddddddddddddddditle</h5>
-                              <a href="#" class="btn play-btn">Play Now</a>
+                              <h5 class="card-title">{{ related_game.name }}</h5>
+                              <!-- <router-link :to="`/game/${related_game.slug}`" class="btn play-btn">Play Now</router-link> -->
+                              <router-link :to="`/game/${related_game.slug}`" class="btn play-btn">Play
+                                 Now</router-link>
                            </div>
                         </div>
                      </div>
@@ -128,7 +131,7 @@ export default {
 <script>
 import store from '@/store';
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 export default {
    name: "SingleGame",
@@ -147,15 +150,22 @@ export default {
             related_games.value = response.data.related_games;
             gameCategories.value = response.data.game.category;
             gameTags.value = response.data.game.tags;
+            console.log(response.data.game);
          } catch (err) {
             console.error('error', err);
          }
       };
 
+      // onMounted Vue কম্পোনেন্ট সম্পূর্ণভাবে DOM-এ মাউন্ট (রেন্ডার) হওয়ার পরে একবার ট্রিগার হয়। এটি সাধারণত সেইসব কাজের জন্য ব্যবহৃত হয়, যেগুলো কম্পোনেন্ট লোড হওয়ার সময় একবারই চালানো দরকার।
       onMounted(() => {
-            // window.scrollTo(0,0);
-            getGameDetails();
-        });
+         getGameDetails();
+      });
+
+      //-- watch Vue এর Composition API এর একটি ফাংশন যা নির্দিষ্ট ভ্যারিয়েবল (props, reactive data, বা computed property) এর উপর নির্ভরশীল হয় এবং যখন সেই ভ্যারিয়েবল বা প্রপ পরিবর্তন হয়, তখন একটি নির্দিষ্ট ফাংশন চালায়। এটি মূলত ডিপেন্ডেন্সি ট্র্যাকিংয়ের জন্য ব্যবহৃত হয়।
+      watch(() => props.slug, (newSlug) => {
+         getGameDetails();
+      });
+
       return {
          game,
          related_games,

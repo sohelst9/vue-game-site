@@ -20,7 +20,7 @@
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ game.name }}</h5>
                             <p class="card-text">{{ game.short_desc }}</p>
-                            <a href="#" class="btn btn-primary">Play Now</a>
+                            <router-link :to="`/game/${game.slug}`" class="btn btn-primary">Play Now</router-link>
                         </div>
                     </div>
                 </div>
