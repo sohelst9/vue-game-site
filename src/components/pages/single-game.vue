@@ -129,6 +129,7 @@ export default {
 
 </script> -->
 <script>
+import { setDefaultMeta } from '@/meta';
 import store from '@/store';
 import axios from 'axios';
 import { onMounted, ref, watch } from 'vue';
@@ -156,15 +157,30 @@ export default {
          }
       };
 
-      // onMounted Vue কম্পোনেন্ট সম্পূর্ণভাবে DOM-এ মাউন্ট (রেন্ডার) হওয়ার পরে একবার ট্রিগার হয়। এটি সাধারণত সেইসব কাজের জন্য ব্যবহৃত হয়, যেগুলো কম্পোনেন্ট লোড হওয়ার সময় একবারই চালানো দরকার।
+      // onMounted runs when the component is mounted
       onMounted(() => {
          getGameDetails();
       });
 
-      //-- watch Vue এর Composition API এর একটি ফাংশন যা নির্দিষ্ট ভ্যারিয়েবল (props, reactive data, বা computed property) এর উপর নির্ভরশীল হয় এবং যখন সেই ভ্যারিয়েবল বা প্রপ পরিবর্তন হয়, তখন একটি নির্দিষ্ট ফাংশন চালায়। এটি মূলত ডিপেন্ডেন্সি ট্র্যাকিংয়ের জন্য ব্যবহৃত হয়।
+      // Watch for changes in game.value.slug to update the meta data
+      watch(() => game.value.slug, (newSlug) => {
+         if (newSlug) {
+            setDefaultMeta({
+               title: newSlug,
+               description: 'Discover exciting games on NapTech Games.',
+               ogTitle: 'Welcome to NapTech Games',
+               ogDescription: 'Play the best online games with us!',
+               ogImage: 'https://yourwebsite.com/path-to-image/homepage-og-image.webp',
+               canonical: 'https://naptechgames.com/home'
+            });
+         }
+      });
+
+      // Watch for changes in props.slug and trigger actions accordingly
       watch(() => props.slug, (newSlug) => {
          getGameDetails();
       });
+
 
       return {
          game,

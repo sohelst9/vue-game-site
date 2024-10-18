@@ -7,22 +7,37 @@
 
             <div class="row g-4">
 
-                 <!-- Loading State -->
-                 <div v-if="loading" class="text-center">
+                <!-- Loading State -->
+                <div v-if="loading" class="text-center">
                     <p>Loading games...</p>
                 </div>
 
                 <!-- Game Card 1 -->
-                <div v-for="game in games" class="col-lg-4 col-md-6" :key="game.id">
+                <div v-for="game in games" class="col-lg-3 col-md-6" :key="game.id">
                     <div class="card game-card shadow-sm">
-                        <img :src="`${imagebaseurl}${game.image}`"
-                            class="card-img-top" :alt="game.name">
+                        <img :src="`${imagebaseurl}${game.image}`" class="card-img-top" :alt="game.name">
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ game.name }}</h5>
-                            <p class="card-text">{{ game.short_desc }}</p>
+                            <!-- <p class="card-text">{{ game.short_desc }}</p> -->
                             <router-link :to="`/game/${game.slug}`" class="btn btn-primary">Play Now</router-link>
                         </div>
                     </div>
+                </div>
+
+
+                <!-- Pagination Buttons -->
+                <div v-if="meta" class="pagination">
+                    <button class="btn btn-danger" :class="{'disabled' : !links.prev}" @click="gotopage(links.prev)" :disabled="!links.prev">
+                        Previous
+                    </button>
+
+                    <button class="btn btn-primary">
+                       {{ meta.current_page }}
+                    </button>
+
+                    <button class="btn btn-danger" :class="{'disabled' : !links.next}" @click="gotopage(links.next)" :disabled="!links.next">
+                        Next
+                    </button>
                 </div>
 
             </div>
@@ -68,23 +83,37 @@ import store from '@/store';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
-export default{
-    name:"Game",
-    setup(){
+export default {
+    name: "Game",
+    setup() {
         const games = ref([]);
         const loading = ref(true);
         const imagebaseurl = store.apiImageUrl;
+        const meta = ref(null);
+        const links = ref(null);
 
-        const fetchgames = async () => {
-            try{
-                const response = await axios.get(`${store.ApiBaseUrl}game`);
+        const fetchgames = async (url = `${store.ApiBaseUrl}game`) => {
+            try {
+                const response = await axios.get(url);
                 games.value = response.data.data;
-                console.log(response.data.data);
+                meta.value = response.data.meta;
+                links.value = response.data.links;
+                console.log(response.data.meta);
 
-            }catch(err){
+            } catch (err) {
                 console.error('error', err);
-            }finally{
+            } finally {
                 loading.value = false;
+            }
+        }
+
+        const gotopage = async (url) => {
+            if(url){
+                // console.log(url)
+                
+                loading.value = true;
+               await fetchgames(url);
+               window.scrollTo(0, 0);
             }
         }
 
@@ -99,10 +128,13 @@ export default{
                 canonical: 'https://naptechgames.com/home'
             });
         });
-        return{
+        return {
             games,
             loading,
-            imagebaseurl
+            imagebaseurl,
+            meta,
+            links,
+            gotopage
         }
     }
 }
@@ -152,5 +184,20 @@ export default{
 .btn-primary {
     background-color: #3b21cc !important;
     border: none !important;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination .btn {
+    margin: 0 5px;
+}
+
+.pagination .btn.active {
+    background-color: #3b21cc;
+    color: white;
 }
 </style>

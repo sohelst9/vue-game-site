@@ -21,15 +21,19 @@
                     <p>Loading games...</p>
                 </div>
                 <!-- Game Card 1 -->
-                <div v-for="game in games" class="col-lg-4 col-md-6" :key="game.id">
+                <div v-for="game in games" class="col-lg-3 col-md-6" :key="game.id">
                     <div class="card game-card shadow-sm">
                         <img :src="`${imagebaseurl}${game.image}`" class="card-img-top" :alt="game.name">
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ game.name }}</h5>
-                            <p class="card-text">{{ game.short_desc }}</p>
+                            <!-- <p class="card-text">{{ game.short_desc }}</p> -->
                             <router-link :to="`/game/${game.slug}`" class="btn btn-primary">Play Now</router-link>
                         </div>
                     </div>
+                </div>
+
+                <div class="view-all-btn">
+                    <router-link to="/game" class="btn_all">View All Games</router-link>
                 </div>
             </div>
         </div>
@@ -94,7 +98,7 @@ export default {
             try {
                 const response = await axios.get(`${store.ApiBaseUrl}game`, {
                     params: {
-                        limit: 54,
+                        limit: 40,
                     }
                 });
                 games.value = response.data.data;
@@ -211,5 +215,37 @@ export default {
 .btn-primary {
     background-color: #3b21cc !important;
     border: none !important;
+}
+
+.view-all-btn {
+    display: flex; /* Center the button */
+    justify-content: center; /* Center horizontally */
+    margin: 50px 0; /* Add margin around the button */
+}
+
+.btn_all {
+    display: inline-block; /* Fit content */
+    padding: 12px 24px; /* Add padding for better spacing */
+    font-size: 1rem; /* Font size */
+    text-align: center; /* Center align text */
+    color: #fff; /* Text color */
+    background-color: #f35f5f; /* Button background color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+/* Hover effect */
+.btn_all:hover {
+    background-color: #cc6363; /* Darker background on hover */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .btn_all {
+        padding: 10px 20px; /* Adjust padding for smaller screens */
+        font-size: 0.9rem; /* Adjust font size for smaller screens */
+    }
 }
 </style>
