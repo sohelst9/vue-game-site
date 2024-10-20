@@ -55,18 +55,18 @@
                         <div class="col-md-6 mb-3">
                            <div class="metadata-item">
                               <i class="bi bi-tags"></i>
-                              <strong>Categories : </strong>
+                              <strong>Categories: </strong>
                               <div class="tags">
-                                 <div class="tag" v-for="category in gameCategories" :key="category">{{ category }}
-                                 </div>
+                                 <div class="tag" v-for="category in gameCategories" :key="category">{{ category
+                                    }}</div>
                               </div>
                            </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-3" v-if="gameTags && gameTags.length > 0">
                            <div class="metadata-item">
                               <i class="bi bi-tag"></i>
-                              <strong>Tags : </strong>
+                              <strong>Tags: </strong>
                               <div class="tags">
                                  <div class="tag" v-for="tag in gameTags" :key="tag">{{ tag }}</div>
                               </div>
@@ -149,9 +149,9 @@ export default {
             const response = await axios.get(`${store.ApiBaseUrl}game/${props.slug}`);
             game.value = response.data.game;
             related_games.value = response.data.related_games;
-            gameCategories.value = response.data.game.category;
-            gameTags.value = response.data.game.tags;
-            console.log(response.data.game);
+            gameTags.value = response.data.game.tags && response.data.game.tags.length > 0 && response.data.game.tags[0] !== "" ? response.data.game.tags : []; 
+            gameCategories.value = response.data.game.category && response.data.game.category.length > 0 && response.data.game.category[0] !== "" ? response.data.game.category : [];
+            // console.log("Tags :", response.data.game.tags);
          } catch (err) {
             console.error('error', err);
          }

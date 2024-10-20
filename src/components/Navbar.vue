@@ -18,23 +18,33 @@
                 </li>
             </ul>
         </div>
-        <form class="form-inline my-2 my-lg-0">
-            <div class="input-group">
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search" />
-                <div class="input-group-append">
-                    <button class="btn btn-outline-light" type="submit">
-                        Search
-                    </button>
-                </div>
-            </div>
-        </form>
+        <div class="search-container">
+            <input :value="searchQuery" type="text" placeholder=" Game Find..." class="form-control"
+                @input="updateSearch($event.target.value)" />
+        </div>
     </nav>
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+
+
+export default defineComponent({
     name: "Navbar",
-};
+    props: {
+        searchQuery: {
+            type: String,
+            default: '',
+        },
+    },
+    emits: ['update:searchQuery'],
+    methods: {
+        updateSearch(value) {
+            this.$emit('update:searchQuery', value);
+        },
+    },
+});
 </script>
 
 <style scoped>

@@ -5,6 +5,10 @@
             <!-- Section Title -->
             <h2 class="section-title">Our Games</h2>
 
+            <div class="page-number" v-if="meta && meta.current_page && meta.last_page">
+                Page {{ meta.current_page }} of {{ meta.last_page }}
+            </div>
+
             <div class="row g-4">
 
                 <!-- Loading State -->
@@ -179,6 +183,15 @@ export default {
     font-weight: bold;
     text-align: center;
     margin-bottom: 2rem;
+}
+
+.page-number {
+    font-size: 1.25rem;
+    color: #555;
+    background-color: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
